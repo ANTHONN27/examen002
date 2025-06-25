@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Creador de Boton</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-blue-200 to-purple-200 min-h-screen flex flex-col items-center justify-center font-sans">
+
+  <div class="bg-white rounded-xl shadow-lg px-8 py-8 flex flex-col items-center max-w-md w-full">
+    <h1 class="text-3xl font-bold text-blue-700 mb-2 text-center">Creador de Boton</h1>
+    <p class="mb-6 text-gray-600 text-center">Escribe el texto para el botón (simulado).</p>
+
+    <form id="btnForm" class="flex w-full gap-2 mb-6" autocomplete="off">
+      <input 
+        type="text" 
+        id="btnText" 
+        placeholder="Escribe el texto del botón..."
+        class="flex-1 border border-blue-400 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 transition"
+        required
+      >
+      <button 
+        type="submit"
+        class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-2 rounded-lg shadow transition"
+      >
+        Crear
+      </button>
+    </form>
+
+    <div id="buttonsContainer" class="flex flex-wrap gap-4 justify-center w-full">
+
+    </div>
+  </div>
+
+  <script>
+
+function crearBotonAJAX(texto, callback) {
+
+    setTimeout(function() {
+
+        callback({
+          success: true,
+          text: texto
+        });
+      }, 500); 
+      
+    }
+
+    document.getElementById('btnForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const input = document.getElementById('btnText');
+      const texto = input.value.trim();
+
+      if (texto.length === 0) {
+        input.classList.add("ring-2", "ring-red-400");
+        input.placeholder = "¡El texto es requerido!";
+        setTimeout(() => {
+          input.classList.remove("ring-2", "ring-red-400");
+          input.placeholder = "Escribe el texto del botón...";
+        }, 1200);
+        return;
+      }
+
+
+      this.querySelector('button[type="submit"]').disabled = true;
+      this.querySelector('button[type="submit"]').textContent = "Creando...";
+
+      crearBotonAJAX(texto, function(respuesta) {
+        if (respuesta.success) {
+          agregarBotonALaVista(respuesta.text);
+        }
+        input.value = "";
+        document.getElementById('btnForm').querySelector('button[type="submit"]').disabled = false;
+        document.getElementById('btnForm').querySelector('button[type="submit"]').textContent = "Crear";
+      });
+    });
+
+    function agregarBotonALaVista(texto) {
+      const container = document.getElementById('buttonsContainer');
+      const btn = document.createElement('button');
+      btn.textContent = texto;
+      btn.className = "bg-gradient-to-r from-violet-500 to-blue-600 hover:from-violet-600 hover:to-blue-800 text-white font-semibold px-5 py-2 rounded-xl shadow-lg border-2 border-transparent hover:border-blue-300 transition";
+
+      btn.style.opacity = 0;
+      container.appendChild(btn);
+      setTimeout(() => {
+        btn.style.transition = "opacity 0.5s";
+        btn.style.opacity = 1;
+      }, 50);
+      btn.addEventListener('dblclick', function() {
+        btn.classList.add('scale-95', 'opacity-25');
+        setTimeout(() => {
+          btn.remove();
+        }, 350);
+      });
+
+      btn.title = "Doble click para eliminar";
+    }
+  </script>
+</body>
+</html>
+
+V
